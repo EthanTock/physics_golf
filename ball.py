@@ -1,14 +1,14 @@
 import pygame as pg
 import math
 
-DEFAULT_COLOR = "pink"
+DEFAULT_COLOR = "red"
 BASE_SIZE = 20
-MAX_SPEED = 20  # TODO Figure out how to incorporate a max speed and a deceleration
+MAX_SPEED = 25  # TODO Figure out how to incorporate a max speed and a deceleration
 DECELERATION_POWER = .01
 SPEED_LOWER_THRESHOLD = 0.05
 
 
-class Boye:
+class Ball:
     def __init__(self, position_tl, size=BASE_SIZE, color=DEFAULT_COLOR):
         self.color = color
 

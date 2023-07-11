@@ -1,6 +1,8 @@
 import pygame as pg
-from boye import Boye
+from ball import Ball
 from colorsets import COLORSETS
+from wall_box import WallBox
+from grid_showcase import GridShowcase
 import math
 
 # Constants
@@ -8,7 +10,7 @@ WINDOW_DIMENSIONS = WINDOW_X, WINDOW_Y = 1080, 720
 SCREEN_CENTER = SCREEN_CENTER_X, SCREEN_CENTER_Y = WINDOW_X / 2, WINDOW_Y / 2
 FRAMERATE = 60
 
-CHOSEN_COLORSET = COLORSETS["neon_city"]
+CHOSEN_COLORSET = COLORSETS["neon_sewers"]
 BG_COLOR = CHOSEN_COLORSET["bg"]
 WALL_COLOR = CHOSEN_COLORSET["wall"]
 BALL_COLOR = CHOSEN_COLORSET["ball"]
@@ -26,17 +28,22 @@ dt = 0
 
 # Objects in-game
 walls = [
-    (pg.Rect(0, 0, 1080, 100), math.pi * 3/2),
-    (pg.Rect(0, 0, 100, 720), 0),
-    (pg.Rect(0, 720-100, 1080, 100), math.pi / 2),
-    (pg.Rect(1080-100, 0, 100, 720), math.pi),
+    (pg.Rect(0, 0, 1080, 5), math.pi * 3/2),
+    (pg.Rect(0, 0, 5, 720), 0),
+    (pg.Rect(0, 720-5, 1080, 5), math.pi / 2),
+    (pg.Rect(1080-5, 0, 5, 720), math.pi),
     (pg.Rect(540-40, 370, 40, 100), math.pi),   # Create a Box object out of these 3, 4th wall added.
     (pg.Rect(540, 370, 40, 100), 0),            # An idea here is to create a cornerboost mechanic.
     (pg.Rect(540-40, 360, 80, 5), math.pi / 2),
     (pg.Rect(540-40, 475, 80, 5), math.pi * 3/2)
 ]
+walls.extend(
+    WallBox((5, 5), (5, 3)).walls
+)
 
-my_boy = Boye((SCREEN_CENTER_X - 10, 200), color=BALL_COLOR)
+grid_showcase = GridShowcase(screen, WINDOW_DIMENSIONS, 20)
+
+ball = Ball((SCREEN_CENTER_X - 10, 200), color=BALL_COLOR)
 
 # Game
 running = True
@@ -50,32 +57,34 @@ while running:
     keys_down = pg.key.get_pressed()
 
     # Draw walls
-    walls_colliding_with_ball = []
     for wall in walls:
         wall_rect = wall[0]
         wall_angle = wall[1]
         pg.draw.rect(screen, WALL_COLOR, wall[0])
-        if my_boy.hitbox.colliderect(wall_rect):
-            while my_boy.hitbox.colliderect(wall_rect):
-                my_boy.shift_angular(1, wall_angle)
-            reflected_angle = 2*wall_angle - my_boy.angle() - math.pi
-            my_boy.set_velocity_angular(my_boy.speed(), reflected_angle)
+        if ball.hitbox.colliderect(wall_rect):
+            print(ball.speed())
+            while ball.hitbox.colliderect(wall_rect):
+                ball.shift_angular(1, wall_angle)
+            reflected_angle = 2 * wall_angle - ball.angle() - math.pi
+            ball.set_velocity_angular(ball.speed(), reflected_angle)
 
     # Interact-able
     pg.draw.rect(screen, OBJ_COLOR, pg.Rect(200, 200, 50, 50))
 
     # Draw my boy
-    pg.draw.rect(screen, my_boy.color, my_boy.hitbox)
+    pg.draw.rect(screen, ball.color, ball.hitbox)
 
     if keys_down[pg.K_RIGHT]:
-        my_boy.add_to_velocity(0.1, 0)
+        ball.add_to_velocity(0.1, 0)
     if keys_down[pg.K_LEFT]:
-        my_boy.add_to_velocity(-0.1, 0)
+        ball.add_to_velocity(-0.1, 0)
     if keys_down[pg.K_DOWN]:
-        my_boy.add_to_velocity(0, 0.1)
+        ball.add_to_velocity(0, 0.1)
     if keys_down[pg.K_UP]:
-        my_boy.add_to_velocity(0, -0.1)
-    my_boy.move()
+        ball.add_to_velocity(0, -0.1)
+    ball.move()
+
+    grid_showcase.draw_lines()
 
     pg.display.flip()
 
