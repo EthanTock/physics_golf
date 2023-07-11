@@ -28,14 +28,15 @@ dt = 0
 walls = [
     (pg.Rect(0, 0, 1080, 100), math.pi * 3/2),
     (pg.Rect(0, 0, 100, 720), 0),
-    (pg.Rect(0, 720 - 100, 1080, 100), math.pi / 2),
-    (pg.Rect(1080 - 100, 0, 100, 720), math.pi),
-    (pg.Rect(540-40, 360+10, 40, 360), math.pi),
-    (pg.Rect(540-40, 360, 80, 20), math.pi / 2),
-    (pg.Rect(540, 360+10, 40, 360), 0),
+    (pg.Rect(0, 720-100, 1080, 100), math.pi / 2),
+    (pg.Rect(1080-100, 0, 100, 720), math.pi),
+    (pg.Rect(540-40, 370, 40, 100), math.pi),   # Create a Box object out of these 3, 4th wall added.
+    (pg.Rect(540, 370, 40, 100), 0),            # An idea here is to create a cornerboost mechanic.
+    (pg.Rect(540-40, 360, 80, 5), math.pi / 2),
+    (pg.Rect(540-40, 475, 80, 5), math.pi * 3/2)
 ]
 
-my_boy = Boye(SCREEN_CENTER, color=BALL_COLOR)
+my_boy = Boye((SCREEN_CENTER_X - 10, 200), color=BALL_COLOR)
 
 # Game
 running = True
@@ -49,16 +50,18 @@ while running:
     keys_down = pg.key.get_pressed()
 
     # Draw walls
+    walls_colliding_with_ball = []
     for wall in walls:
         wall_rect = wall[0]
         wall_angle = wall[1]
-        pg.draw.rect(screen, WALL_COLOR, wall_rect)
+        pg.draw.rect(screen, WALL_COLOR, wall[0])
         if my_boy.hitbox.colliderect(wall_rect):
             while my_boy.hitbox.colliderect(wall_rect):
                 my_boy.shift_angular(1, wall_angle)
             reflected_angle = 2*wall_angle - my_boy.angle() - math.pi
             my_boy.set_velocity_angular(my_boy.speed(), reflected_angle)
 
+    # Interact-able
     pg.draw.rect(screen, OBJ_COLOR, pg.Rect(200, 200, 50, 50))
 
     # Draw my boy
