@@ -1,8 +1,10 @@
 import pygame as pg
-from ball import Ball
+from game_assets.ball import Ball
+from game_assets.wall_box import WallBox
+from game_assets.grid_showcase import GridShowcase
+from game_assets.button import Button
 from colorsets import COLORSETS
-from wall_box import WallBox
-from grid_showcase import GridShowcase
+from game_config import GRID_SIZE, BUTTON_DARKNESS
 import math
 
 # Constants
@@ -40,8 +42,15 @@ walls = [
 walls.extend(
     WallBox((5, 5), (5, 3)).walls
 )
+walls.extend(
+    WallBox((15, 7), (7, 7), "horizontal", ("up", "left")).walls
+)
 
-grid_showcase = GridShowcase(screen, WINDOW_DIMENSIONS, 20)
+buttons = [
+    Button((5, 15), (2, 2), False, False, print, ("hello world!", "h"), {"end": "lol\n", "sep": "       "})
+]
+
+grid_showcase = GridShowcase(screen, WINDOW_DIMENSIONS, GRID_SIZE)
 
 ball = Ball((SCREEN_CENTER_X - 10, 200), color=BALL_COLOR)
 
@@ -69,7 +78,13 @@ while running:
             ball.set_velocity_angular(ball.speed(), reflected_angle)
 
     # Interact-able
-    pg.draw.rect(screen, OBJ_COLOR, pg.Rect(200, 200, 50, 50))
+    for button in buttons:
+        if ball.hitbox.colliderect(button.interact_box):
+            button.down()
+            pg.draw.rect(screen, tuple([b * BUTTON_DARKNESS for b in OBJ_COLOR]), button.interact_box)
+        else:
+            button.up()
+            pg.draw.rect(screen, OBJ_COLOR, button.interact_box)
 
     # Draw my boy
     pg.draw.rect(screen, ball.color, ball.hitbox)
@@ -84,7 +99,8 @@ while running:
         ball.add_to_velocity(0, -0.1)
     ball.move()
 
-    grid_showcase.draw_lines()
+    if keys_down[pg.K_g]:
+        grid_showcase.draw_lines()
 
     pg.display.flip()
 

@@ -1,5 +1,6 @@
 import pygame as pg
 from math import pi
+from game_config import GRID_SIZE
 
 DEFAULT_COLOR = "black"
 THIN_WALL_THICKNESS = 5
@@ -9,15 +10,15 @@ class WallBox:
     def __init__(self, top_left_tiles, dimensions_tiles, orientation="vertical", sides=("right", "up", "left", "down"), color=DEFAULT_COLOR):
         self.top_left_tiles = self.top_left_tiles_x, self.top_left_tiles_y = top_left_tiles
         self.dimensions_tiles = self.dimensions_tiles_x, self.dimensions_tiles_y = dimensions_tiles
-
-        self.top_left = self.top_left_x, self.top_left_y = self.top_left_tiles_x * 20, self.top_left_tiles_y * 20
-        self.dimensions = self.dimensions_x, self.dimensions_y = self.dimensions_tiles_x * 20, self.dimensions_tiles_y * 20
+        self.top_left = self.top_left_x, self.top_left_y = self.top_left_tiles_x * GRID_SIZE, self.top_left_tiles_y * GRID_SIZE
+        self.dimensions = self.dimensions_x, self.dimensions_y = self.dimensions_tiles_x * GRID_SIZE, self.dimensions_tiles_y * GRID_SIZE
 
         self.orientation = orientation
         self.sides = sides
         self.color = color
 
         self.walls = []
+
         self.create_walls()
 
     def create_walls(self):
