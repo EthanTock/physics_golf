@@ -12,7 +12,7 @@ WINDOW_DIMENSIONS = WINDOW_X, WINDOW_Y = 1080, 720
 SCREEN_CENTER = SCREEN_CENTER_X, SCREEN_CENTER_Y = WINDOW_X / 2, WINDOW_Y / 2
 FRAMERATE = 60
 
-CHOSEN_COLORSET = COLORSETS["neon_sewers"]
+CHOSEN_COLORSET = COLORSETS["neon_city"]
 BG_COLOR = CHOSEN_COLORSET["bg"]
 WALL_COLOR = CHOSEN_COLORSET["wall"]
 BALL_COLOR = CHOSEN_COLORSET["ball"]
@@ -50,7 +50,7 @@ buttons = [
     Button((5, 15), (2, 2), False, False, print, ("hello world!", "h"), {"end": "lol\n", "sep": "       "})
 ]
 
-grid_showcase = GridShowcase(screen, WINDOW_DIMENSIONS, GRID_SIZE)
+grid_showcase = GridShowcase(screen, WINDOW_DIMENSIONS, ("red", "yellow3", "blue"))
 
 ball = Ball((SCREEN_CENTER_X - 10, 200), color=BALL_COLOR)
 
@@ -71,7 +71,6 @@ while running:
         wall_angle = wall[1]
         pg.draw.rect(screen, WALL_COLOR, wall[0])
         if ball.hitbox.colliderect(wall_rect):
-            print(ball.speed())
             while ball.hitbox.colliderect(wall_rect):
                 ball.shift_angular(1, wall_angle)
             reflected_angle = 2 * wall_angle - ball.angle() - math.pi

@@ -2,12 +2,12 @@ import pygame as pg
 from game_config import GRID_SIZE
 
 
-def nothing(*args, **kwargs):
+def noop(*args, **kwargs):
     pass
 
 
 class Button:
-    def __init__(self, top_left_tiles, dimensions_tiles, perma_down, holdable, action=nothing, action_args=(), action_kwargs={}):
+    def __init__(self, top_left_tiles, dimensions_tiles, perma_down, holdable, action=noop, action_args=(), action_kwargs={}):
         self.action = action
         self.action_args = action_args
         self.action_kwargs = action_kwargs
