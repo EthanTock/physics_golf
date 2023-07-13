@@ -4,8 +4,8 @@ import math
 DEFAULT_COLOR = "red"
 BASE_SIZE = 20
 MAX_SPEED = 25  # TODO Figure out how to incorporate a max speed and a deceleration
-DECELERATION_POWER = .01
-SPEED_LOWER_THRESHOLD = 0.05
+DECELERATION_POWER = .0175
+SPEED_LOWER_THRESHOLD = 0.1
 
 
 class Ball:
@@ -79,7 +79,7 @@ class Ball:
         self.velocity = (self.velocity_x, self.velocity_y)
 
     def in_motion(self):
-        return self.speed() == 0
+        return self.speed() > SPEED_LOWER_THRESHOLD
 
     def center(self):
         return self.position_tl_x + self.size / 2, self.position_tl_y + self.size / 2

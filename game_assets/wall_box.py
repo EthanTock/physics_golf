@@ -3,7 +3,7 @@ from math import pi
 from game_config import GRID_SIZE
 
 DEFAULT_COLOR = "black"
-THIN_WALL_THICKNESS = 5
+THIN_WALL_THICKNESS = 8
 
 
 class WallBox:

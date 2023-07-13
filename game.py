@@ -55,7 +55,7 @@ grid_showcase = GridShowcase(screen, WINDOW_DIMENSIONS, ("blue", "tan", "red"), 
 
 ball = Ball((SCREEN_CENTER_X - 10, 200), color=BALL_COLOR)
 
-ball_arrow = Arrow(ball.center(), 0, 30, 60, 3, "white")
+ball_arrow = Arrow(ball.center(), 0, 30, 48, 3, "white")
 
 # Game
 running = True
@@ -103,10 +103,9 @@ while running:
         ball_arrow.update_length(ball_arrow.length - 1)
     if keys_down[pg.K_UP]:
         ball_arrow.update_length(ball_arrow.length + 1)
-    if keys_down[pg.K_SPACE]:
+    if keys_down[pg.K_SPACE]:  # and not ball.in_motion():
         # TODO Set a timer for the next time space can be hit...
         ball.set_velocity_angular(ball_arrow.length/3, ball_arrow.angle)
-        print(ball_arrow.angle)
     ball.move()
     ball_arrow.update_tail_pos(ball.center())
 
