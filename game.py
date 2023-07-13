@@ -3,6 +3,7 @@ from game_assets.ball import Ball
 from game_assets.wall_box import WallBox
 from game_assets.grid_showcase import GridShowcase
 from game_assets.button import Button
+from game_assets.arrow import Arrow
 from colorsets import COLORSETS
 from game_config import GRID_SIZE, BUTTON_DARKNESS
 import math
@@ -50,9 +51,11 @@ buttons = [
     Button((5, 15), (2, 2), False, False, print, ("hello world!", "h"), {"end": "lol\n", "sep": "       "})
 ]
 
-grid_showcase = GridShowcase(screen, WINDOW_DIMENSIONS, ("red", "yellow3", "blue"))
+grid_showcase = GridShowcase(screen, WINDOW_DIMENSIONS, ("blue", "tan", "red"), (1, 1, 3), (1, 2, 10))  # ("steelblue4", "springgreen3", "tan1")
 
 ball = Ball((SCREEN_CENTER_X - 10, 200), color=BALL_COLOR)
+
+ball_arrow = Arrow(ball.center(), 0, 30, 3, "white")
 
 # Game
 running = True
@@ -85,18 +88,27 @@ while running:
             button.up()
             pg.draw.rect(screen, OBJ_COLOR, button.interact_box)
 
-    # Draw my boy
+    # Draw ball
     pg.draw.rect(screen, ball.color, ball.hitbox)
 
+    # Draw ball arrow
+    ball_arrow.draw(screen)
+
+    # Ball motion
     if keys_down[pg.K_RIGHT]:
         ball.add_to_velocity(0.1, 0)
+        ball_arrow.update_angle(ball_arrow.angle + math.pi/60)
     if keys_down[pg.K_LEFT]:
         ball.add_to_velocity(-0.1, 0)
+        ball_arrow.update_angle(ball_arrow.angle - math.pi/60)
     if keys_down[pg.K_DOWN]:
         ball.add_to_velocity(0, 0.1)
+        ball_arrow.update_length(ball_arrow.length - 1)
     if keys_down[pg.K_UP]:
         ball.add_to_velocity(0, -0.1)
+        ball_arrow.update_length(ball_arrow.length + 1)
     ball.move()
+    ball_arrow.update_tail_pos(ball.center())
 
     if keys_down[pg.K_g]:
         grid_showcase.draw_lines()

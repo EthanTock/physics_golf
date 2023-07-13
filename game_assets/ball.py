@@ -11,7 +11,6 @@ SPEED_LOWER_THRESHOLD = 0.05
 class Ball:
     def __init__(self, position_tl, size=BASE_SIZE, color=DEFAULT_COLOR):
         self.color = color
-
         self.size = size
 
         self.position_tl = self.position_tl_x, self.position_tl_y = position_tl
@@ -37,11 +36,10 @@ class Ball:
         self.shift(self.velocity_x, self.velocity_y)
         self.decelerate()
         if self.speed() < SPEED_LOWER_THRESHOLD:
-            self.velocity = self.velocity_x, self.velocity_y = (0, 0)
+            self.velocity = self.velocity_x, self.velocity_y = 0, 0
 
     def set_velocity(self, v_x, v_y):
-        self.velocity_x = v_x
-        self.velocity_y = v_y
+        self.velocity = self.velocity_x, self.velocity_y = v_x, v_y
 
     def set_velocity_angular(self, magnitude, angle):
         v_x = math.cos(angle) * magnitude
@@ -52,6 +50,7 @@ class Ball:
         if self.speed() < MAX_SPEED:
             self.velocity_x += add_x
             self.velocity_y += add_y
+            self.velocity = (self.velocity_x, self.velocity_y)
 
     def add_to_velocity_angular(self, magnitude, angle):
         add_x = math.cos(angle) * magnitude
@@ -78,6 +77,12 @@ class Ball:
         self.velocity_x *= 1 - power
         self.velocity_y *= 1 - power
         self.velocity = (self.velocity_x, self.velocity_y)
+
+    def in_motion(self):
+        return self.speed() == 0
+
+    def center(self):
+        return self.position_tl_x + self.size / 2, self.position_tl_y + self.size / 2
 
     def update_color(self, new_color):
         self.color = new_color
