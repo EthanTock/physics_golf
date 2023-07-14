@@ -35,10 +35,6 @@ walls = [
     (pg.Rect(0, 0, 5, 720), 0),
     (pg.Rect(0, 720-5, 1080, 5), math.pi / 2),
     (pg.Rect(1080-5, 0, 5, 720), math.pi),
-    (pg.Rect(540-40, 370, 40, 100), math.pi),   # Create a Box object out of these 3, 4th wall added.
-    (pg.Rect(540, 370, 40, 100), 0),            # An idea here is to create a cornerboost mechanic.
-    (pg.Rect(540-40, 360, 80, 5), math.pi / 2),
-    (pg.Rect(540-40, 475, 80, 5), math.pi * 3/2)
 ]
 walls.extend(
     WallBox((5, 5), (5, 3)).walls
@@ -103,7 +99,7 @@ while running:
         ball_arrow.update_length(ball_arrow.length - 1)
     if keys_down[pg.K_UP]:
         ball_arrow.update_length(ball_arrow.length + 1)
-    if keys_down[pg.K_SPACE]:  # and not ball.in_motion():
+    if keys_down[pg.K_SPACE] and not ball.in_motion():
         # TODO Set a timer for the next time space can be hit...
         ball.set_velocity_angular(ball_arrow.length/3, ball_arrow.angle)
     ball.move()
