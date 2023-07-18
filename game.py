@@ -5,19 +5,15 @@ from game_assets.grid_showcase import GridShowcase
 from game_assets.button import Button
 from game_assets.arrow import Arrow
 from colorsets import COLORSETS
+from levels import LEVELS
 from game_config import GRID_SIZE, BUTTON_DARKNESS
 import math
 
 # Constants
-WINDOW_DIMENSIONS = WINDOW_X, WINDOW_Y = 1080, 720
+GRID_DIMENSIONS = GRID_X, GRID_Y = 54, 36
+WINDOW_DIMENSIONS = WINDOW_X, WINDOW_Y = GRID_X * GRID_SIZE, GRID_Y * GRID_SIZE
 SCREEN_CENTER = SCREEN_CENTER_X, SCREEN_CENTER_Y = WINDOW_X / 2, WINDOW_Y / 2
 FRAMERATE = 60
-
-CHOSEN_COLORSET = COLORSETS["neon_city"]
-BG_COLOR = CHOSEN_COLORSET["bg"]
-WALL_COLOR = CHOSEN_COLORSET["wall"]
-BALL_COLOR = CHOSEN_COLORSET["ball"]
-OBJ_COLOR = CHOSEN_COLORSET["obj"]
 
 # Init statements
 pg.init()
@@ -30,26 +26,23 @@ clock = pg.time.Clock()
 dt = 0
 
 # Objects in-game
-walls = [
-    (pg.Rect(0, 0, 1080, 5), math.pi * 3/2),
-    (pg.Rect(0, 0, 5, 720), 0),
-    (pg.Rect(0, 720-5, 1080, 5), math.pi / 2),
-    (pg.Rect(1080-5, 0, 5, 720), math.pi),
-]
-walls.extend(
-    WallBox((5, 5), (5, 3)).walls
-)
-walls.extend(
-    WallBox((15, 7), (7, 7), "horizontal", ("up", "left")).walls
-)
-
-buttons = [
-    Button((5, 15), (2, 2), False, False, print, ("hello world!", "h"), {"end": "lol\n", "sep": "       "})
+outer_walls = [
+    (pg.Rect(0, 0, 1080, 20), math.pi * 3/2),
+    (pg.Rect(0, 0, 20, 720), 0),
+    (pg.Rect(0, 720-20, 1080, 20), math.pi / 2),
+    (pg.Rect(1080-20, 0, 20, 720), math.pi),
 ]
 
-grid_showcase = GridShowcase(screen, WINDOW_DIMENSIONS, ("blue", "tan", "red"), (1, 1, 3), (1, 2, 10))  # ("steelblue4", "springgreen3", "tan1")
+current_level = LEVELS["1"]
+all_walls = outer_walls
+for w in current_level.wall_boxes:
+    all_walls.extend(w.walls)
+for w in current_level.named_wall_boxes.values():
+    all_walls.extend(w.walls)
 
-ball = Ball((SCREEN_CENTER_X - 10, 200), color=BALL_COLOR)
+grid_showcase = GridShowcase(screen, WINDOW_DIMENSIONS, ("tan", "blue", "magenta", "red"), (1, 1, 2, 3), (1, 2, 5, 10))  # ("steelblue4", "springgreen3", "tan1")
+
+ball = Ball((SCREEN_CENTER_X - 10, 200), color=current_level.ball_color)
 
 ball_arrow = Arrow(ball.center(), 0, 30, 48, 3, "white")
 
@@ -60,15 +53,15 @@ while running:
         if event.type == pg.QUIT:
             running = False
 
-    screen.fill(BG_COLOR)
+    screen.fill(current_level.bg_color)
 
     keys_down = pg.key.get_pressed()
 
     # Draw walls
-    for wall in walls:
+    for wall in all_walls:
         wall_rect = wall[0]
         wall_angle = wall[1]
-        pg.draw.rect(screen, WALL_COLOR, wall[0])
+        pg.draw.rect(screen, current_level.wall_color, wall[0])
         if ball.hitbox.colliderect(wall_rect):
             while ball.hitbox.colliderect(wall_rect):
                 ball.shift_angular(1, wall_angle)
@@ -76,13 +69,13 @@ while running:
             ball.set_velocity_angular(ball.speed(), reflected_angle)
 
     # Interact-able
-    for button in buttons:
+    for button in current_level.buttons:
         if ball.hitbox.colliderect(button.interact_box):
             button.down()
-            pg.draw.rect(screen, tuple([b * BUTTON_DARKNESS for b in OBJ_COLOR]), button.interact_box)
+            pg.draw.rect(screen, tuple([b * BUTTON_DARKNESS for b in current_level.obj_color]), button.interact_box)
         else:
             button.up()
-            pg.draw.rect(screen, OBJ_COLOR, button.interact_box)
+            pg.draw.rect(screen, current_level.obj_color, button.interact_box)
 
     # Draw ball
     pg.draw.rect(screen, ball.color, ball.hitbox)

@@ -7,7 +7,7 @@ def noop(*args, **kwargs):
 
 
 class Button:
-    def __init__(self, top_left_tiles, dimensions_tiles, perma_down, holdable, action=noop, action_args=(), action_kwargs={}):
+    def __init__(self, top_left_tiles, dimensions_tiles, name="", perma_down=False, holdable=False, action=noop, action_args=(), action_kwargs={}):
         self.action = action
         self.action_args = action_args
         self.action_kwargs = action_kwargs
@@ -21,6 +21,10 @@ class Button:
         self.active = True
         self.holdable = holdable
         self.perma_down = perma_down
+        self.name = name
+
+    def has_name(self):
+        return bool(self.name)
 
     def do_action(self):
         self.action(*self.action_args, **self.action_kwargs)
