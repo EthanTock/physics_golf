@@ -6,7 +6,7 @@ from game_assets.button import Button
 from game_assets.arrow import Arrow
 from colorsets import COLORSETS
 from levels import LEVELS
-from game_config import GRID_SIZE, BUTTON_DARKNESS
+from game_config import GRID_SIZE, BUTTON_DARKNESS, DEBUG_FONT
 import math
 
 # Constants
@@ -101,8 +101,11 @@ while running:
     if keys_down[pg.K_g]:
         grid_showcase.draw_lines()
         pg.mouse.set_cursor(pg.cursors.broken_x)
-        my_font = pg.font.Font("Arial", 10)
-        my_font.render(str(pg.mouse.get_pos()), False, "white")
+        coords_raw_text = str(tuple([p // 20 for p in pg.mouse.get_pos()]))
+        coords_font = pg.font.Font(DEBUG_FONT, 20)
+        coords_text = coords_font.render(coords_raw_text, False, "white")
+        coords_rect = coords_text.get_rect()
+        screen.blit(coords_text, coords_rect)
     else:
         pg.mouse.set_cursor(pg.cursors.arrow)
 
