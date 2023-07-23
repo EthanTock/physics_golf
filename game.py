@@ -99,10 +99,16 @@ while running:
         ball.move()
         ball_arrow.update_tail_pos(ball.center())
     else:
+        # TODO Switch the color here to gray and set the level to a default
+        # Render outer walls
         for wall in outer_walls:
             wall_rect = wall[0]
             wall_angle = wall[1]
             pg.draw.rect(screen, current_level.wall_color, wall[0])
+
+        # Render potential walls
+
+
 
     if keys_down[pg.K_g]:
         grid_showcase.draw_lines()
@@ -117,7 +123,8 @@ while running:
 
     if keys_down[pg.K_e]:
         editor_mode = True
-        # TODO enter editor mode
+    if keys_down[pg.K_p]:
+        editor_mode = False
 
     pg.display.flip()
 
