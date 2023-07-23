@@ -100,6 +100,11 @@ while running:
 
     if keys_down[pg.K_g]:
         grid_showcase.draw_lines()
+        pg.mouse.set_cursor(pg.cursors.broken_x)
+        my_font = pg.font.Font("Arial", 10)
+        my_font.render(str(pg.mouse.get_pos()), False, "white")
+    else:
+        pg.mouse.set_cursor(pg.cursors.arrow)
 
     pg.display.flip()
 
