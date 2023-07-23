@@ -34,7 +34,7 @@ outer_walls = [
 ]
 
 current_level = LEVELS["1"]
-all_walls = outer_walls
+all_walls = outer_walls.copy()
 for w in current_level.wall_boxes:
     all_walls.extend(w.walls)
 for w in current_level.named_wall_boxes.values():
@@ -47,6 +47,7 @@ ball = Ball((SCREEN_CENTER_X - 10, 200), color=current_level.ball_color)
 ball_arrow = Arrow(ball.center(), 0, 30, 48, 3, "white")
 
 # Game
+editor_mode = False
 running = True
 while running:
     for event in pg.event.get():
@@ -57,57 +58,66 @@ while running:
 
     keys_down = pg.key.get_pressed()
 
-    # Draw walls
-    for wall in all_walls:
-        wall_rect = wall[0]
-        wall_angle = wall[1]
-        pg.draw.rect(screen, current_level.wall_color, wall[0])
-        if ball.hitbox.colliderect(wall_rect):
-            while ball.hitbox.colliderect(wall_rect):
-                ball.shift_angular(1, wall_angle)
-            reflected_angle = 2 * wall_angle - ball.angle() - math.pi
-            ball.set_velocity_angular(ball.speed(), reflected_angle)
+    if not editor_mode:
+        # Draw walls
+        for wall in all_walls:
+            wall_rect = wall[0]
+            wall_angle = wall[1]
+            pg.draw.rect(screen, current_level.wall_color, wall[0])
+            if ball.hitbox.colliderect(wall_rect):
+                while ball.hitbox.colliderect(wall_rect):
+                    ball.shift_angular(1, wall_angle)
+                reflected_angle = 2 * wall_angle - ball.angle() - math.pi
+                ball.set_velocity_angular(ball.speed(), reflected_angle)
 
-    # Interact-able
-    for button in current_level.buttons:
-        if ball.hitbox.colliderect(button.interact_box):
-            button.down()
-            pg.draw.rect(screen, tuple([b * BUTTON_DARKNESS for b in current_level.obj_color]), button.interact_box)
-        else:
-            button.up()
-            pg.draw.rect(screen, current_level.obj_color, button.interact_box)
+        # Interact-able
+        for button in current_level.buttons:
+            if ball.hitbox.colliderect(button.interact_box):
+                button.down()
+                pg.draw.rect(screen, tuple([b * BUTTON_DARKNESS for b in current_level.obj_color]), button.interact_box)
+            else:
+                button.up()
+                pg.draw.rect(screen, current_level.obj_color, button.interact_box)
 
-    # Draw ball
-    pg.draw.rect(screen, ball.color, ball.hitbox)
+        # Draw ball
+        pg.draw.rect(screen, ball.color, ball.hitbox)
 
-    # Draw ball arrow
-    ball_arrow.draw(screen)
+        # Draw ball arrow
+        ball_arrow.draw(screen)
 
-    # Ball motion
-    if keys_down[pg.K_RIGHT]:
-        ball_arrow.update_angle(ball_arrow.angle - math.pi/90)
-    if keys_down[pg.K_LEFT]:
-        ball_arrow.update_angle(ball_arrow.angle + math.pi/90)
-    if keys_down[pg.K_DOWN]:
-        ball_arrow.update_length(ball_arrow.length - 1)
-    if keys_down[pg.K_UP]:
-        ball_arrow.update_length(ball_arrow.length + 1)
-    if keys_down[pg.K_SPACE] and not ball.in_motion():
-        # TODO Set a timer for the next time space can be hit...
-        ball.set_velocity_angular(ball_arrow.length/3, ball_arrow.angle)
-    ball.move()
-    ball_arrow.update_tail_pos(ball.center())
+        # Ball motion
+        if keys_down[pg.K_RIGHT]:
+            ball_arrow.update_angle(ball_arrow.angle - math.pi/90)
+        if keys_down[pg.K_LEFT]:
+            ball_arrow.update_angle(ball_arrow.angle + math.pi/90)
+        if keys_down[pg.K_DOWN]:
+            ball_arrow.update_length(ball_arrow.length - 1)
+        if keys_down[pg.K_UP]:
+            ball_arrow.update_length(ball_arrow.length + 1)
+        if keys_down[pg.K_SPACE] and not ball.in_motion():
+            ball.set_velocity_angular(ball_arrow.length/3, ball_arrow.angle)
+        ball.move()
+        ball_arrow.update_tail_pos(ball.center())
+    else:
+        for wall in outer_walls:
+            wall_rect = wall[0]
+            wall_angle = wall[1]
+            pg.draw.rect(screen, current_level.wall_color, wall[0])
 
     if keys_down[pg.K_g]:
         grid_showcase.draw_lines()
         pg.mouse.set_cursor(pg.cursors.broken_x)
         coords_raw_text = str(tuple([p // 20 for p in pg.mouse.get_pos()]))
-        coords_font = pg.font.Font(DEBUG_FONT, 20)
+        coords_font = pg.font.Font(DEBUG_FONT, GRID_SIZE)
         coords_text = coords_font.render(coords_raw_text, False, "white")
         coords_rect = coords_text.get_rect()
         screen.blit(coords_text, coords_rect)
     else:
         pg.mouse.set_cursor(pg.cursors.arrow)
+
+    if keys_down[pg.K_e]:
+        editor_mode = True
+        # TODO enter editor mode
 
     pg.display.flip()
 
