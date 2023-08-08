@@ -4,6 +4,7 @@ from game_assets.wall_box import WallBox
 from game_assets.grid_showcase import GridShowcase
 from game_assets.button import Button
 from game_assets.arrow import Arrow
+from game_assets.terminal import Terminal
 from colorsets import COLORSETS
 from levels import LEVELS
 from game_config import GRID_DIMENSIONS, GRID_X, GRID_Y, GRID_SIZE, BUTTON_DARKNESS, DEBUG_FONT
@@ -47,6 +48,8 @@ grid_showcase = GridShowcase(screen, WINDOW_DIMENSIONS, ("blue", "red", "yellow"
 ball = Ball((SCREEN_CENTER_X - 10, 200), color=current_level.ball_color)
 
 ball_arrow = Arrow(ball.center(), 0, 30, 48, 3, "white")
+
+terminal = Terminal(screen)
 
 # Game
 editor_mode = False
@@ -135,6 +138,14 @@ while running:
     if keys_down[pg.K_p] and editor_mode:
         editor_mode = False
         current_level = previous_level
+
+    if keys_down[pg.K_4]:
+        terminal.turn_on()
+    if keys_down[pg.K_3]:
+        terminal.turn_off()
+    if terminal.is_on:
+        terminal.display()
+
 
     pg.display.flip()
 
