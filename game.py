@@ -6,11 +6,10 @@ from game_assets.button import Button
 from game_assets.arrow import Arrow
 from colorsets import COLORSETS
 from levels import LEVELS
-from game_config import GRID_SIZE, BUTTON_DARKNESS, DEBUG_FONT
+from game_config import GRID_DIMENSIONS, GRID_X, GRID_Y, GRID_SIZE, BUTTON_DARKNESS, DEBUG_FONT
 import math
 
 # Constants
-GRID_DIMENSIONS = GRID_X, GRID_Y = 54, 36
 WINDOW_DIMENSIONS = WINDOW_X, WINDOW_Y = GRID_X * GRID_SIZE, GRID_Y * GRID_SIZE
 SCREEN_CENTER = SCREEN_CENTER_X, SCREEN_CENTER_Y = WINDOW_X / 2, WINDOW_Y / 2
 FRAMERATE = 60
