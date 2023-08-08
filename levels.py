@@ -4,7 +4,7 @@ from level import Level
 
 LEVEL_1 = Level(
     name="1",
-    colorset="bubblegum",
+    colorset="neon_city",
     wall_boxes=[
         WallBox((2, 2), (3, 20))
     ],
@@ -15,7 +15,12 @@ LEVEL_1 = Level(
         Button((5, 5), (2, 2), "b0", action=print, action_args=["this is a Button. "], action_kwargs={"end": "dear God.\n"})
     }
 )
+EDITOR = Level(
+    name="editor",
+    colorset="grayscale"
+)
 
 LEVELS = {
-    LEVEL_1.name: LEVEL_1
+    LEVEL_1.name: LEVEL_1,
+    EDITOR.name: EDITOR
 }

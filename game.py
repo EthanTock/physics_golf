@@ -20,6 +20,8 @@ pg.init()
 
 # Display
 screen = pg.display.set_mode(WINDOW_DIMENSIONS)
+alpha_layer = pg.Surface(WINDOW_DIMENSIONS)
+alpha_layer.set_alpha(30)
 
 # Time
 clock = pg.time.Clock()
@@ -34,13 +36,14 @@ outer_walls = [
 ]
 
 current_level = LEVELS["1"]
+previous_level = current_level
 all_walls = outer_walls.copy()
 for w in current_level.wall_boxes:
     all_walls.extend(w.walls)
 for w in current_level.named_wall_boxes.values():
     all_walls.extend(w.walls)
 
-grid_showcase = GridShowcase(screen, WINDOW_DIMENSIONS, ("tan", "blue", "magenta", "red"), (1, 1, 2, 3), (1, 2, 5, 10))  # ("steelblue4", "springgreen3", "tan1")
+grid_showcase = GridShowcase(screen, WINDOW_DIMENSIONS, ("blue", "red", "yellow", "white"), (1, 1, 2, 3), (1, 2, 5, 10))  # ("steelblue4", "springgreen3", "tan1")
 
 ball = Ball((SCREEN_CENTER_X - 10, 200), color=current_level.ball_color)
 
@@ -57,6 +60,9 @@ while running:
     screen.fill(current_level.bg_color)
 
     keys_down = pg.key.get_pressed()
+
+    if keys_down[pg.K_ESCAPE]:
+        running = False
 
     if not editor_mode:
         # Draw walls
@@ -99,7 +105,6 @@ while running:
         ball.move()
         ball_arrow.update_tail_pos(ball.center())
     else:
-        # TODO Switch the color here to gray and set the level to a default
         # Render outer walls
         for wall in outer_walls:
             wall_rect = wall[0]
@@ -108,23 +113,29 @@ while running:
 
         # Render potential walls
 
+        # Cursor
+        # TODO blitting of area of rectangle about to be applied
 
+        # have a saving feature to the LEVELS dict...
 
     if keys_down[pg.K_g]:
         grid_showcase.draw_lines()
         pg.mouse.set_cursor(pg.cursors.broken_x)
-        coords_raw_text = str(tuple([p // 20 for p in pg.mouse.get_pos()]))
+        coords_raw_text = str(tuple([p // GRID_SIZE for p in pg.mouse.get_pos()]))
         coords_font = pg.font.Font(DEBUG_FONT, GRID_SIZE)
         coords_text = coords_font.render(coords_raw_text, False, "white")
-        coords_rect = coords_text.get_rect()
+        coords_rect = coords_text.get_rect(topleft=pg.mouse.get_pos())
         screen.blit(coords_text, coords_rect)
     else:
         pg.mouse.set_cursor(pg.cursors.arrow)
 
-    if keys_down[pg.K_e]:
+    if keys_down[pg.K_e] and not editor_mode:
         editor_mode = True
-    if keys_down[pg.K_p]:
+        previous_level = LEVELS[current_level.name]
+        current_level = LEVELS["editor"]
+    if keys_down[pg.K_p] and editor_mode:
         editor_mode = False
+        current_level = previous_level
 
     pg.display.flip()
 
