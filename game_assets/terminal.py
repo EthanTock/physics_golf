@@ -12,8 +12,8 @@ class Terminal:
 
         self.is_on = False
 
-        self.term_bg = pg.Surface((WINDOW_X, WINDOW_Y))
-        self.term_bg.set_alpha(70)
+        self.term_bg = pg.Surface((WINDOW_X, WINDOW_Y/2))
+        self.term_bg.set_alpha(128)
         self.term_bg.fill("black")
 
         self.current_command = ""
@@ -46,7 +46,7 @@ class Terminal:
         self.lines_printed = 0
 
     def display(self):
-        self.game_screen.blit(self.term_bg, (0, 0))
+        self.game_screen.blit(self.term_bg, (0, WINDOW_Y/2 + 1))
         self.game_screen.blit(self.command_text(), (0, WINDOW_Y - LINE_SIZE))
 
     def run(self, events):
