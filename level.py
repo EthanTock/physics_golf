@@ -14,3 +14,11 @@ class Level:
         self.buttons = buttons
         self.starting_point = starting_point
         self.hole = hole
+
+    def update_colorset(self, new_colorset):
+        if new_colorset in COLORSETS.keys():
+            self.colorset = new_colorset
+            self.bg_color = COLORSETS[self.colorset]["bg"]
+            self.wall_color = COLORSETS[self.colorset]["wall"]
+            self.ball_color = COLORSETS[self.colorset]["ball"]
+            self.obj_color = COLORSETS[self.colorset]["obj"]

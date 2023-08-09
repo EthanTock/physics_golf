@@ -5,13 +5,13 @@ from game_assets.grid_showcase import GridShowcase
 from game_assets.button import Button
 from game_assets.arrow import Arrow
 from game_assets.terminal import Terminal
+from game_assets.level_command_executor import LevelCommandExecutor
 from colorsets import COLORSETS
 from levels import LEVELS
-from game_config import GRID_DIMENSIONS, GRID_X, GRID_Y, GRID_SIZE, BUTTON_DARKNESS, DEBUG_FONT
+from game_config import WINDOW_DIMENSIONS, WINDOW_X, WINDOW_Y, GRID_SIZE, BUTTON_DARKNESS, DEBUG_FONT
 import math
 
 # Constants
-WINDOW_DIMENSIONS = WINDOW_X, WINDOW_Y = GRID_X * GRID_SIZE, GRID_Y * GRID_SIZE
 SCREEN_CENTER = SCREEN_CENTER_X, SCREEN_CENTER_Y = WINDOW_X / 2, WINDOW_Y / 2
 FRAMERATE = 60
 
@@ -49,13 +49,16 @@ ball = Ball((SCREEN_CENTER_X - 10, 200), color=current_level.ball_color)
 
 ball_arrow = Arrow(ball.center(), 0, 30, 48, 3, "white")
 
-terminal = Terminal(screen)
+level_command_executor = LevelCommandExecutor(current_level)
+terminal = Terminal(screen, level_command_executor)
 
 # Game
 editor_mode = False
 running = True
+events = []
 while running:
-    for event in pg.event.get():
+    events = pg.event.get()
+    for event in events:
         if event.type == pg.QUIT:
             running = False
 
@@ -135,17 +138,18 @@ while running:
         editor_mode = True
         previous_level = LEVELS[current_level.name]
         current_level = LEVELS["editor"]
+        level_command_executor.level = current_level
     if keys_down[pg.K_p] and editor_mode:
         editor_mode = False
         current_level = previous_level
+        level_command_executor.level = current_level
 
     if keys_down[pg.K_4]:
         terminal.turn_on()
     if keys_down[pg.K_3]:
         terminal.turn_off()
     if terminal.is_on:
-        terminal.display()
-
+        terminal.run(events)
 
     pg.display.flip()
 
