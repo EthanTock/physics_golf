@@ -1,6 +1,5 @@
 import pygame as pg
 from game_config import WINDOW_X, WINDOW_Y, DEBUG_FONT
-from game_assets.level_command_executor import LevelCommandExecutor
 
 LINE_SIZE = 20
 TEXT_SIZE = 15
@@ -14,12 +13,19 @@ class Terminal:
         self.is_on = False
 
         self.term_bg = pg.Surface((WINDOW_X, WINDOW_Y))
-        self.term_bg.set_alpha(50)
+        self.term_bg.set_alpha(70)
         self.term_bg.fill("black")
 
         self.current_command = ""
         self.past_commands = []
         self.lines_printed = 0
+
+    def execute_command(self):
+        self.current_command = self.current_command.strip()
+        if self.current_command == "exit":
+            self.turn_off()
+        else:
+            self.level_command_executor.parse_command(self.current_command)
 
     def new_entry(self):
         self.past_commands.insert(0, self.current_command)
@@ -47,7 +53,7 @@ class Terminal:
         for event in events:
             if event.type == pg.KEYDOWN:
                 if event.key == pg.K_RETURN:
-                    self.level_command_executor.parse_command(self.current_command)
+                    self.execute_command()
                     self.new_entry()
                 elif event.key == pg.K_BACKSPACE and len(self.current_command) > 0:
                     self.current_command = self.current_command[:-1]

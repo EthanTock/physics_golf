@@ -2,7 +2,7 @@ from colorsets import COLORSETS
 
 
 class Level:
-    def __init__(self, name, colorset, wall_boxes=[], named_wall_boxes={}, buttons={}, starting_point=(), hole=()):
+    def __init__(self, name, colorset="grayscale", wall_boxes=[], named_wall_boxes={}, buttons={}, start_point=(), end_point=()):
         self.name = name
         self.colorset = colorset
         self.bg_color = COLORSETS[self.colorset]["bg"]
@@ -12,8 +12,8 @@ class Level:
         self.wall_boxes = wall_boxes
         self.named_wall_boxes = named_wall_boxes
         self.buttons = buttons
-        self.starting_point = starting_point
-        self.hole = hole
+        self.start_point = start_point
+        self.end_point = end_point
 
     def update_colorset(self, new_colorset):
         if new_colorset in COLORSETS.keys():
