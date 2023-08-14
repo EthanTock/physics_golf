@@ -26,6 +26,11 @@ class LevelCommandExecutor:
                     self.commands.append("nozoomies")
                 elif arg == "on":
                     self.commands.append("zoomies")
+            elif command_name == "grid":
+                if arg == "off":
+                    self.commands.append("nogrid")
+                elif arg == "on":
+                    self.commands.append("grid")
         elif command == "new":
             self.change_level_to(str(dt.datetime.isoformat(dt.datetime.now())))
         elif command == "edit":

@@ -1,12 +1,9 @@
 import pygame as pg
 from game_assets.ball import Ball
-from game_assets.wall_box import WallBox
 from game_assets.grid_showcase import GridShowcase
-from game_assets.button import Button
 from game_assets.arrow import Arrow
 from game_assets.terminal import Terminal
 from game_assets.level_command_executor import LevelCommandExecutor
-from colorsets import COLORSETS
 from levels import LEVELS
 from game_config import WINDOW_DIMENSIONS, WINDOW_X, WINDOW_Y, GRID_SIZE, BUTTON_DARKNESS, DEBUG_FONT, DEBUG_FONT_SIZE
 import math
@@ -48,7 +45,8 @@ def get_all_walls():
     return all_walls
 
 
-grid_showcase = GridShowcase(screen, WINDOW_DIMENSIONS, ("blue", "red", "yellow", "white"), (1, 1, 2, 3), (1, 2, 5, 10))  # ("steelblue4", "springgreen3", "tan1")
+# grid_showcase = GridShowcase(screen, 170, ("blue", "red", "yellow", "white"), (1, 1, 2, 3), (1, 2, 5, 10))  # ("steelblue4", "springgreen3", "tan1")
+grid_showcase = GridShowcase(screen, 64, ["white"], [1], [1])
 
 ball = Ball((SCREEN_CENTER_X - 10, 200), color=current_level.ball_color)
 
@@ -57,11 +55,14 @@ ball_arrow = Arrow(ball.center(), 0, 30, 48, 3, "white")
 level_command_executor = LevelCommandExecutor(current_level)
 terminal = Terminal(screen, level_command_executor)
 
+# Command States
+zoomies = False
+grid_on = False
+
 # Game
 editor_mode = False
 running = True
 events = []
-zoomies = False
 while running:
     events = pg.event.get()
     for event in events:
@@ -125,7 +126,7 @@ while running:
 
         # have a saving feature to the LEVELS dict...
 
-    if keys_down[pg.K_g]:
+    if keys_down[pg.K_g] or grid_on:
         grid_showcase.draw_lines()
         pg.mouse.set_cursor(pg.cursors.broken_x)
         coords_raw_text = str(tuple([p // GRID_SIZE for p in pg.mouse.get_pos()]))
@@ -163,6 +164,10 @@ while running:
             zoomies = True
         elif command == "nozoomies":
             zoomies = False
+        elif command == "grid":
+            grid_on = True
+        elif command == "nogrid":
+            grid_on = False
 
     pg.display.flip()
 
