@@ -17,6 +17,9 @@ pg.init()
 
 # Display
 screen = pg.display.set_mode(WINDOW_DIMENSIONS)
+pg.display.set_caption("Physics Golf")
+app_icon = pg.image.load("./static/sharkboi.png")
+pg.display.set_icon(app_icon)
 alpha_layer = pg.Surface(WINDOW_DIMENSIONS)
 alpha_layer.set_alpha(30)
 
@@ -45,7 +48,7 @@ def get_all_walls():
     return all_walls
 
 
-# grid_showcase = GridShowcase(screen, 170, ("blue", "red", "yellow", "white"), (1, 1, 2, 3), (1, 2, 5, 10))  # ("steelblue4", "springgreen3", "tan1")
+# grid_showcase = GridShowcase(screen, 256, ("blue", "red", "yellow", "white"), (1, 1, 2, 3), (1, 2, 5, 10))  # ("steelblue4", "springgreen3", "tan1")
 grid_showcase = GridShowcase(screen, 64, ["white"], [1], [1])
 
 ball = Ball((SCREEN_CENTER_X - 10, 200), color=current_level.ball_color)
