@@ -10,8 +10,7 @@ DEBUG_FONT = "./PTMono.ttc"
 DEBUG_FONT_SIZE = 15
 
 FUNCTION_KEYS = {
-    "edit": pg.K_e,
-    "new": pg.K_n,
-    "play": pg.K_p,
+    "exit": pg.K_ESCAPE,
+    "terminal": pg.K_4,
     "show_grid": pg.K_g
 }

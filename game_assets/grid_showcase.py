@@ -3,12 +3,12 @@ from game_config import GRID_SIZE, WINDOW_X, WINDOW_Y
 
 
 class GridShowcase:
-    def __init__(self, game_screen, brightness, colors, thicknesses, grid_iterations):
+    def __init__(self, game_screen, opacity, colors, thicknesses, grid_iterations):
         self.game_screen = game_screen
 
-        self.brightness = brightness
+        self.opacity = opacity
         self.blend_screen = pg.Surface((WINDOW_X, WINDOW_Y))
-        self.blend_screen.set_alpha(self.brightness)
+        self.blend_screen.set_alpha(self.opacity)
         self.blend_screen.set_colorkey("black")
 
         self.colors = colors

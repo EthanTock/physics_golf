@@ -4,8 +4,9 @@ from game_assets.grid_showcase import GridShowcase
 from game_assets.arrow import Arrow
 from game_assets.terminal import Terminal
 from game_assets.level_command_executor import LevelCommandExecutor
+from game_assets.edit_rectangle import EditRectangle
 from levels import LEVELS
-from game_config import WINDOW_DIMENSIONS, WINDOW_X, WINDOW_Y, GRID_SIZE, BUTTON_DARKNESS, DEBUG_FONT, DEBUG_FONT_SIZE
+from game_config import WINDOW_DIMENSIONS, WINDOW_X, WINDOW_Y, GRID_SIZE, BUTTON_DARKNESS, DEBUG_FONT, DEBUG_FONT_SIZE, FUNCTION_KEYS
 import math
 
 # Constants
@@ -58,6 +59,8 @@ ball_arrow = Arrow(ball.center(), 0, 30, 48, 3, "white")
 level_command_executor = LevelCommandExecutor(current_level)
 terminal = Terminal(screen, level_command_executor)
 
+TEST_EDIT_RECTANGLE = EditRectangle(screen, (111, 222), 100, "white")
+
 # Command States
 zoomies = False
 grid_on = False
@@ -76,7 +79,7 @@ while running:
 
     keys_down = pg.key.get_pressed()
 
-    if keys_down[pg.K_ESCAPE]:
+    if keys_down[FUNCTION_KEYS["exit"]]:
         running = False
 
     # Draw walls
@@ -129,7 +132,7 @@ while running:
 
         # have a saving feature to the LEVELS dict...
 
-    if keys_down[pg.K_g] or grid_on:
+    if keys_down[FUNCTION_KEYS["show_grid"]] or grid_on:
         grid_showcase.draw_lines()
         pg.mouse.set_cursor(pg.cursors.broken_x)
         coords_raw_text = str(tuple([p // GRID_SIZE for p in pg.mouse.get_pos()]))
@@ -140,17 +143,7 @@ while running:
     else:
         pg.mouse.set_cursor(pg.cursors.arrow)
 
-    # if keys_down[pg.K_e] and not editor_mode:
-    #     editor_mode = True
-    #     previous_level = LEVELS[current_level.name]
-    #     current_level = LEVELS["editor"]
-    #     level_command_executor.level = current_level
-    # if keys_down[pg.K_p] and editor_mode:
-    #     editor_mode = False
-    #     current_level = previous_level
-    #     level_command_executor.level = current_level
-
-    if keys_down[pg.K_4]:
+    if keys_down[FUNCTION_KEYS["terminal"]]:
         terminal.turn_on()
     if terminal.is_on:
         terminal.run(events)
@@ -171,6 +164,8 @@ while running:
             grid_on = True
         elif command == "nogrid":
             grid_on = False
+
+    TEST_EDIT_RECTANGLE.draw()
 
     pg.display.flip()
 

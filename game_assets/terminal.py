@@ -24,15 +24,13 @@ class Terminal:
 
     def execute_command(self):
         self.current_command = self.current_command.strip()
+        self.past_commands.insert(0, self.current_command)
         if self.current_command == "exit":
             self.turn_off()
         elif self.current_command == "clear":
             self.clear()
         else:
             self.level_command_executor.parse_command(self.current_command)
-
-    def new_entry(self):
-        self.past_commands.insert(0, self.current_command)
         self.current_command = ""
 
     def command_text(self, text):
@@ -61,7 +59,6 @@ class Terminal:
             if event.type == pg.KEYDOWN and not self.just_turned_on:
                 if event.key == pg.K_RETURN:
                     self.execute_command()
-                    self.new_entry()
                 elif event.key == pg.K_BACKSPACE and len(self.current_command) > 0:
                     self.current_command = self.current_command[:-1]
                 else:
