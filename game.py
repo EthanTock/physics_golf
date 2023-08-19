@@ -2,9 +2,10 @@ import pygame as pg
 from game_assets.ball import Ball
 from game_assets.grid_showcase import GridShowcase
 from game_assets.arrow import Arrow
+from game_assets.wall_box import WallBox
 from game_assets.terminal import Terminal
 from game_assets.level_command_executor import LevelCommandExecutor
-from game_assets.edit_rectangle import EditRectangle
+from game_assets.selection_box import SelectionBox
 from levels import LEVELS
 from game_config import WINDOW_DIMENSIONS, WINDOW_X, WINDOW_Y, GRID_SIZE, BUTTON_DARKNESS, DEBUG_FONT, DEBUG_FONT_SIZE, FUNCTION_KEYS
 import math
@@ -59,7 +60,11 @@ ball_arrow = Arrow(ball.center(), 0, 30, 48, 3, "white")
 level_command_executor = LevelCommandExecutor(current_level)
 terminal = Terminal(screen, level_command_executor)
 
-TEST_EDIT_RECTANGLE = EditRectangle(screen, (111, 222), 100, "white")
+TEST_SELECTION_BOX = SelectionBox(screen, (100, 100), 100, "white")
+current_selection_box = None
+rect_args_complete = False
+
+current_tool = "pointer"
 
 # Command States
 zoomies = False
@@ -69,11 +74,19 @@ grid_on = False
 editor_mode = False
 running = True
 events = []
+previous_mouse_position = "up"
+current_mouse_position = "up"
 while running:
+    # print(previous_mouse_position, current_mouse_position)
+    previous_mouse_position = current_mouse_position
     events = pg.event.get()
     for event in events:
         if event.type == pg.QUIT:
             running = False
+        if event.type == pg.MOUSEBUTTONDOWN:
+            current_mouse_position = "down"
+        elif event.type == pg.MOUSEBUTTONUP:
+            current_mouse_position = "up"
 
     screen.fill(current_level.bg_color)
 
@@ -103,6 +116,7 @@ while running:
             pg.draw.rect(screen, current_level.obj_color, button.interact_box)
 
     if not editor_mode:
+        # == PLAY MODE ==
         # Draw ball
         pg.draw.rect(screen, current_level.ball_color, ball.hitbox)
 
@@ -123,12 +137,50 @@ while running:
         ball.move()
         ball_arrow.update_tail_pos(ball.center())
     else:
+        # == EDITOR MODE ==
+        # Tool selection
+        if keys_down[FUNCTION_KEYS["tool_pointer"]]:
+            current_tool = "pointer"
+        elif keys_down[FUNCTION_KEYS["tool_rect"]]:
+            current_tool = "rect"
+        tool_text = pg.font.Font(DEBUG_FONT, DEBUG_FONT_SIZE).render(f"{current_tool} ({pg.key.name(FUNCTION_KEYS['tool_' + current_tool])})", False, "white")
+        screen.blit(tool_text, (WINDOW_X - 10 * GRID_SIZE, 0))
+
         title_text = pg.font.Font(DEBUG_FONT, DEBUG_FONT_SIZE).render(f"'{current_level.name}'", False, "white")
         screen.blit(title_text, (0, 0))
-        # Render potential walls
 
-        # Cursor
-        # TODO blitting of area of rectangle about to be applied
+        if current_tool == "rect":
+            # Left click to begin box
+            if not current_selection_box and pg.mouse.get_pressed()[0] and previous_mouse_position == "up":
+                if not current_selection_box:
+                    current_selection_box = SelectionBox(screen, pg.mouse.get_pos(), 50, "white")
+                    new_wall_box = None
+                    rect_args_complete = False
+            # Left click to end box
+            elif current_selection_box and pg.mouse.get_pressed()[0] and previous_mouse_position == "up":
+                if current_selection_box.is_active:
+                    new_wall_box = WallBox(*current_selection_box.get_wall_box_args())
+                    current_selection_box.is_active = False
+            # Take args, await enter to finish box
+            if current_selection_box and not current_selection_box.is_active:
+                if not rect_args_complete:
+                    if keys_down[FUNCTION_KEYS["tool_rect_orient_vertical"]]:
+                        new_wall_box.orientation = "vertical"
+                        new_wall_box.create_walls()
+                    elif keys_down[FUNCTION_KEYS["tool_rect_orient_horizontal"]]:
+                        new_wall_box.orientation = "horizontal"
+                        new_wall_box.create_walls()
+                    if keys_down[FUNCTION_KEYS["tool_rect_finalize"]]:
+                        rect_args_complete = True
+                else:
+                    current_level.wall_boxes.append(new_wall_box)
+                    rect_args_complete = False
+                    current_selection_box = None
+            # Right click
+            if pg.mouse.get_pressed()[2]:
+                current_selection_box = None
+            if current_selection_box:
+                current_selection_box.draw()
 
         # have a saving feature to the LEVELS dict...
 
@@ -164,8 +216,6 @@ while running:
             grid_on = True
         elif command == "nogrid":
             grid_on = False
-
-    TEST_EDIT_RECTANGLE.draw()
 
     pg.display.flip()
 

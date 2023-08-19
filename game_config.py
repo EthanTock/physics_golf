@@ -12,5 +12,10 @@ DEBUG_FONT_SIZE = 15
 FUNCTION_KEYS = {
     "exit": pg.K_ESCAPE,
     "terminal": pg.K_4,
-    "show_grid": pg.K_g
+    "show_grid": pg.K_g,
+    "tool_pointer": pg.K_v,
+    "tool_rect": pg.K_r,
+    "tool_rect_orient_horizontal": pg.K_RIGHT,
+    "tool_rect_orient_vertical": pg.K_UP,
+    "tool_rect_finalize": pg.K_RETURN
 }

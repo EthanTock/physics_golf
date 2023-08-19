@@ -27,6 +27,7 @@ class WallBox:
         return bool(self.name)
 
     def create_walls(self):
+        self.walls = []
         if "right" in self.sides:
             if self.orientation == "horizontal":
                 self.walls.append(
