@@ -1,5 +1,6 @@
 import pygame as pg
 from game_assets.ball import Ball
+from game_assets.hole import Hole
 from game_assets.grid_showcase import GridShowcase
 from game_assets.arrow import Arrow
 from game_assets.wall_box import WallBox
@@ -38,8 +39,7 @@ outer_walls = [
     (pg.Rect(1080-20, 0, 20, 720), math.pi),
 ]
 
-current_level = LEVELS["1"]
-previous_level = current_level
+current_level, ball, ball_arrow, hole, level_command_executor, terminal = [None] * 6
 
 
 def get_all_walls():
@@ -51,16 +51,24 @@ def get_all_walls():
     return all_walls
 
 
+def init_level(level_name):
+    global current_level, ball, ball_arrow, hole, level_command_executor, terminal
+    if level_name in LEVELS.keys():
+        current_level = LEVELS[level_name]
+    else:
+        current_level = LEVELS["editor"]
+    ball = Ball(current_level.start_point, color=current_level.ball_color)
+    ball_arrow = Arrow(ball.center(), 0, 30, 48, 3, "white")
+    hole = Hole(current_level.end_point, (100, 100))
+    level_command_executor = LevelCommandExecutor(current_level)
+    terminal = Terminal(screen, level_command_executor)
+
+
+init_level("new")
+
+# Tools
 # grid_showcase = GridShowcase(screen, 256, ("blue", "red", "yellow", "white"), (1, 1, 2, 3), (1, 2, 5, 10))  # ("steelblue4", "springgreen3", "tan1")
 grid_showcase = GridShowcase(screen, 64, ["white"], [1], [1])
-
-ball = Ball((SCREEN_CENTER_X - 10, 200), color=current_level.ball_color)
-
-ball_arrow = Arrow(ball.center(), 0, 30, 48, 3, "white")
-
-level_command_executor = LevelCommandExecutor(current_level)
-terminal = Terminal(screen, level_command_executor)
-
 current_tool = "pointer"
 rect_tool = RectTool(screen, "white", 100)
 
@@ -102,10 +110,10 @@ while running:
     for button in current_level.buttons:
         if ball.hitbox.colliderect(button.interact_box):
             button.down()
-            pg.draw.rect(screen, tuple([b * BUTTON_DARKNESS for b in current_level.obj_color]), button.interact_box)
+            button.draw(screen, tuple([b * BUTTON_DARKNESS for b in current_level.obj_color]))
         else:
             button.up()
-            pg.draw.rect(screen, current_level.obj_color, button.interact_box)
+            button.draw(screen, current_level.obj_color)
 
     if not editor_mode:
         # == PLAY MODE ==

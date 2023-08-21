@@ -13,11 +13,15 @@ LEVEL_1 = Level(
     },
     buttons={
         Button((5, 5), (2, 2), "b0", action=print, action_args=["this is a Button. "], action_kwargs={"end": "dear God.\n"})
-    }
+    },
+    start_point=(150, 150),
+    end_point=(500, 200)
 )
 EDITOR = Level(
     name="editor",
-    colorset="grayscale"
+    colorset="grayscale",
+    start_point=(0, 0),
+    end_point=(100, 100)  # TODO change this to a hole object...
 )
 
 LEVELS = {

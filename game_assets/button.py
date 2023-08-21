@@ -1,5 +1,5 @@
 import pygame as pg
-from game_config import GRID_SIZE
+from game_config import GRID_SIZE, BUTTON_DARKNESS
 
 
 def noop(*args, **kwargs):
@@ -19,6 +19,7 @@ class Button:
 
         self.interact_box = pg.Rect(self.top_left, self.dimensions)
         self.active = True
+        self.is_down = False
         self.holdable = holdable
         self.perma_down = perma_down
         self.name = name
@@ -30,11 +31,18 @@ class Button:
         self.action(*self.action_args, **self.action_kwargs)
 
     def down(self):
+        self.is_down = True
         if self.active:
             self.do_action()
         if not self.holdable:
             self.active = False
 
     def up(self):
+        self.is_down = False
         if not self.perma_down:
             self.active = True
+
+    def draw(self, game_screen, color):
+        if self.is_down:
+            color = tuple([b * BUTTON_DARKNESS for b in color])
+        pg.draw.rect(game_screen, color, self.interact_box)
