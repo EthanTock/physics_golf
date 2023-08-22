@@ -3,17 +3,14 @@ from game_assets.ball import Ball
 from game_assets.hole import Hole
 from game_assets.grid_showcase import GridShowcase
 from game_assets.arrow import Arrow
-from game_assets.wall_box import WallBox
 from game_assets.terminal import Terminal
 from game_assets.level_command_executor import LevelCommandExecutor
-from game_assets.selection_box import SelectionBox
 from game_assets.rect_tool import RectTool
 from levels import LEVELS
-from game_config import WINDOW_DIMENSIONS, WINDOW_X, WINDOW_Y, GRID_SIZE, BUTTON_DARKNESS, DEBUG_FONT, DEBUG_FONT_SIZE, FUNCTION_KEYS
+from game_config import WINDOW_DIMENSIONS, WINDOW_X, GRID_SIZE, BUTTON_DARKNESS, DEBUG_FONT, DEBUG_FONT_SIZE, FUNCTION_KEYS
 import math
 
 # Constants
-SCREEN_CENTER = SCREEN_CENTER_X, SCREEN_CENTER_Y = WINDOW_X / 2, WINDOW_Y / 2
 FRAMERATE = 60
 
 # Init statements
@@ -44,7 +41,7 @@ current_level, ball, ball_arrow, hole, level_command_executor, terminal = [None]
 
 def get_all_walls():
     all_walls = outer_walls.copy()
-    for w in current_level.wall_boxes:
+    for w in current_level.unnamed_wall_boxes:
         all_walls.extend(w.walls)
     for w in current_level.named_wall_boxes.values():
         all_walls.extend(w.walls)
@@ -56,10 +53,11 @@ def init_level(level_name):
     if level_name in LEVELS.keys():
         current_level = LEVELS[level_name]
     else:
-        current_level = LEVELS["editor"]
+        current_level = LEVELS["empty"]
+    print(current_level.to_json())
     ball = Ball(current_level.start_point, color=current_level.ball_color)
     ball_arrow = Arrow(ball.center(), 0, 30, 48, 3, "white")
-    hole = Hole(current_level.end_point, (100, 100))
+    hole = current_level.hole
     level_command_executor = LevelCommandExecutor(current_level)
     terminal = Terminal(screen, level_command_executor)
 
@@ -153,7 +151,7 @@ while running:
         if current_tool == "rect":
             rect_tool.listen(keys_down)
             if rect_tool.rect_is_ready():
-                current_level.wall_boxes.append(rect_tool.new_wall_box)
+                current_level.add_wall_box(rect_tool.new_wall_box)
 
         # have a saving feature to the LEVELS dict...
 
@@ -176,7 +174,7 @@ while running:
     for command in level_command_executor.commands:
         if command == "change":
             current_level = level_command_executor.level
-            level_command_executor.on_new_level = False
+            # level_command_executor.on_new_level = False
         elif command == "edit":
             editor_mode = True
         elif command == "play":

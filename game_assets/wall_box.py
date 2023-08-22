@@ -23,6 +23,16 @@ class WallBox:
 
         self.create_walls()
 
+    def to_kwargs(self):
+        return {
+            "top_left_tiles": self.top_left_tiles,
+            "dimensions_tiles": self.dimensions_tiles,
+            "name": self.name,
+            "orientation": self.orientation,
+            "sides": self.sides,
+            "color": self.color
+        }
+
     def has_name(self):
         return bool(self.name)
 

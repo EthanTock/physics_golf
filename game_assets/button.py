@@ -8,7 +8,10 @@ def noop(*args, **kwargs):
 
 class Button:
     def __init__(self, top_left_tiles, dimensions_tiles, name="", perma_down=False, holdable=False, action=noop, action_args=(), action_kwargs={}):
-        self.action = action
+        if type(action) == str:
+            self.action = eval(action)
+        else:
+            self.action = action
         self.action_args = action_args
         self.action_kwargs = action_kwargs
 
@@ -23,6 +26,21 @@ class Button:
         self.holdable = holdable
         self.perma_down = perma_down
         self.name = name
+
+    def to_kwargs(self):
+        return {
+            "top_left_tiles": self.top_left_tiles,
+            "dimensions_tiles": self.dimensions_tiles,
+            "name": self.name,
+            "perma_down": self.perma_down,
+            "holdable": self.holdable,
+            "action": self.action,
+            "action_args": self.action_args,
+            "action_kwargs": self.action_kwargs
+        }
+
+    def to_json_safe_kwargs(self):
+        return self.to_kwargs().update({"action": str(self.action)})
 
     def has_name(self):
         return bool(self.name)

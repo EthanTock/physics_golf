@@ -1,6 +1,6 @@
 from level import Level
-from levels import LEVELS
 import datetime as dt
+import json
 
 
 class LevelCommandExecutor:
@@ -31,18 +31,22 @@ class LevelCommandExecutor:
                     self.commands.append("nogrid")
                 elif arg == "on":
                     self.commands.append("grid")
+            elif command_name == "save":
+                self.level.name = arg
+                self.level.save_to_levels_json()
         elif command == "new":
-            self.change_level_to(str(dt.datetime.isoformat(dt.datetime.now())))
+            self.change_level_to("l" + str(dt.datetime.isoformat(dt.datetime.now())))
         elif command == "edit":
             self.commands.append("edit")
         elif command == "play":
             self.commands.append("play")
+        elif command == "save":
+            self.level.save_to_levels_json()
 
     def change_level_to(self, level_name):
-        if level_name in LEVELS.keys():
-            self.level = LEVELS[level_name]
-        else:
-            self.level = Level(
-                level_name
-            )
+        try:
+            with open(f"levels_json/{level_name}.json", "r") as json_file:
+                self.level = Level(**json.load(json_file))
+        except FileNotFoundError:
+            self.level = Level(level_name)
         self.commands.append("change")

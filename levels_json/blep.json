@@ -1,0 +1,327 @@
+{
+  "name": "blep",
+  "colorset": "bubblegum",
+  "unnamed_wall_boxes": [
+    {
+      "top_left_tiles": [
+        6,
+        5
+      ],
+      "dimensions_tiles": [
+        6,
+        6
+      ],
+      "name": "",
+      "orientation": "vertical",
+      "sides": [
+        "up",
+        "left",
+        "right",
+        "down"
+      ],
+      "color": "black"
+    },
+    {
+      "top_left_tiles": [
+        12,
+        12
+      ],
+      "dimensions_tiles": [
+        1,
+        1
+      ],
+      "name": "",
+      "orientation": "vertical",
+      "sides": [
+        "up",
+        "left",
+        "right",
+        "down"
+      ],
+      "color": "black"
+    },
+    {
+      "top_left_tiles": [
+        13,
+        13
+      ],
+      "dimensions_tiles": [
+        1,
+        1
+      ],
+      "name": "",
+      "orientation": "vertical",
+      "sides": [
+        "up",
+        "left",
+        "right",
+        "down"
+      ],
+      "color": "black"
+    },
+    {
+      "top_left_tiles": [
+        14,
+        12
+      ],
+      "dimensions_tiles": [
+        1,
+        1
+      ],
+      "name": "",
+      "orientation": "vertical",
+      "sides": [
+        "up",
+        "left",
+        "right",
+        "down"
+      ],
+      "color": "black"
+    },
+    {
+      "top_left_tiles": [
+        15,
+        13
+      ],
+      "dimensions_tiles": [
+        1,
+        1
+      ],
+      "name": "",
+      "orientation": "vertical",
+      "sides": [
+        "up",
+        "left",
+        "right",
+        "down"
+      ],
+      "color": "black"
+    },
+    {
+      "top_left_tiles": [
+        16,
+        12
+      ],
+      "dimensions_tiles": [
+        1,
+        1
+      ],
+      "name": "",
+      "orientation": "vertical",
+      "sides": [
+        "up",
+        "left",
+        "right",
+        "down"
+      ],
+      "color": "black"
+    },
+    {
+      "top_left_tiles": [
+        17,
+        5
+      ],
+      "dimensions_tiles": [
+        6,
+        6
+      ],
+      "name": "",
+      "orientation": "vertical",
+      "sides": [
+        "up",
+        "left",
+        "right",
+        "down"
+      ],
+      "color": "black"
+    },
+    {
+      "top_left_tiles": [
+        13,
+        14
+      ],
+      "dimensions_tiles": [
+        1,
+        1
+      ],
+      "name": "",
+      "orientation": "vertical",
+      "sides": [
+        "up",
+        "left",
+        "right",
+        "down"
+      ],
+      "color": "black"
+    },
+    {
+      "top_left_tiles": [
+        15,
+        14
+      ],
+      "dimensions_tiles": [
+        1,
+        1
+      ],
+      "name": "",
+      "orientation": "vertical",
+      "sides": [
+        "up",
+        "left",
+        "right",
+        "down"
+      ],
+      "color": "black"
+    },
+    {
+      "top_left_tiles": [
+        14,
+        15
+      ],
+      "dimensions_tiles": [
+        1,
+        1
+      ],
+      "name": "",
+      "orientation": "vertical",
+      "sides": [
+        "up",
+        "left",
+        "right",
+        "down"
+      ],
+      "color": "black"
+    },
+    {
+      "top_left_tiles": [
+        7,
+        2
+      ],
+      "dimensions_tiles": [
+        1,
+        1
+      ],
+      "name": "",
+      "orientation": "vertical",
+      "sides": [
+        "up",
+        "left",
+        "right",
+        "down"
+      ],
+      "color": "black"
+    },
+    {
+      "top_left_tiles": [
+        8,
+        1
+      ],
+      "dimensions_tiles": [
+        1,
+        1
+      ],
+      "name": "",
+      "orientation": "vertical",
+      "sides": [
+        "up",
+        "left",
+        "right",
+        "down"
+      ],
+      "color": "black"
+    },
+    {
+      "top_left_tiles": [
+        9,
+        2
+      ],
+      "dimensions_tiles": [
+        1,
+        1
+      ],
+      "name": "",
+      "orientation": "vertical",
+      "sides": [
+        "up",
+        "left",
+        "right",
+        "down"
+      ],
+      "color": "black"
+    },
+    {
+      "top_left_tiles": [
+        21,
+        2
+      ],
+      "dimensions_tiles": [
+        1,
+        1
+      ],
+      "name": "",
+      "orientation": "vertical",
+      "sides": [
+        "up",
+        "left",
+        "right",
+        "down"
+      ],
+      "color": "black"
+    },
+    {
+      "top_left_tiles": [
+        20,
+        1
+      ],
+      "dimensions_tiles": [
+        1,
+        1
+      ],
+      "name": "",
+      "orientation": "vertical",
+      "sides": [
+        "up",
+        "left",
+        "right",
+        "down"
+      ],
+      "color": "black"
+    },
+    {
+      "top_left_tiles": [
+        19,
+        2
+      ],
+      "dimensions_tiles": [
+        1,
+        1
+      ],
+      "name": "",
+      "orientation": "vertical",
+      "sides": [
+        "up",
+        "left",
+        "right",
+        "down"
+      ],
+      "color": "black"
+    }
+  ],
+  "named_wall_boxes": {},
+  "buttons": {},
+  "start_point": [
+    0,
+    0
+  ],
+  "hole": {
+    "left_top": [
+      20,
+      20
+    ],
+    "dimensions": [
+      20,
+      20
+    ],
+    "color": "black"
+  }
+}
