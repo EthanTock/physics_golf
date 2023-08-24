@@ -22,6 +22,7 @@ class RectTool:
         # State 1: moving selection.
         # State 2: stationary selection & edit.
         # State 3: rect is ready.
+        self.will_undo = False
 
         self.keys_down = []
         self.previous_keys_down = []
@@ -50,6 +51,9 @@ class RectTool:
         self.keys_down = keys_down
 
     def handle_events(self):
+        if self.keys_down[pg.K_u] and not self.previous_keys_down[pg.K_u]:
+            self.will_undo = True
+
         left_click, right_click = False, False
         if self.previous_mouse_state == "up":
             if self.mouse_buttons_down[0]:
@@ -108,5 +112,11 @@ class RectTool:
     def rect_is_ready(self):
         if self.state == 3:
             self.state = 0
+            return True
+        return False
+
+    def check_undo(self):
+        if self.will_undo:
+            self.will_undo = False
             return True
         return False

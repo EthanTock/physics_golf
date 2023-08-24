@@ -2,7 +2,16 @@ from colorsets import COLORSETS
 from game_assets.wall_box import WallBox
 from game_assets.button import Button
 from game_assets.hole import Hole
+import pygame as pg
 import json
+import math
+
+OUTER_WALLS = [
+    (pg.Rect(0, 0, 1080, 20), math.pi * 3/2),
+    (pg.Rect(0, 0, 20, 720), 0),
+    (pg.Rect(0, 720-20, 1080, 20), math.pi / 2),
+    (pg.Rect(1080-20, 0, 20, 720), math.pi),
+]
 
 DEFAULT_HOLE_ARGS = {
     "left_top": (20, 20),
@@ -51,6 +60,18 @@ class Level:
             self.named_wall_boxes.update({new_wall_box.name: new_wall_box})
         else:
             self.unnamed_wall_boxes.append(new_wall_box)
+
+    def pop_wall_box(self):
+        if self.unnamed_wall_boxes:
+            self.unnamed_wall_boxes.pop()
+
+    def get_all_walls(self):
+        all_walls = OUTER_WALLS.copy()
+        for w in self.unnamed_wall_boxes:
+            all_walls.extend(w.walls)
+        for w in self.named_wall_boxes.values():
+            all_walls.extend(w.walls)
+        return all_walls
 
     def update_colorset(self, new_colorset):
         if new_colorset in COLORSETS.keys():

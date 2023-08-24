@@ -1,0 +1,56 @@
+{
+  "name": "walltest",
+  "colorset": "neon_city",
+  "unnamed_wall_boxes": [
+    {
+      "top_left_tiles": [
+        11,
+        12
+      ],
+      "dimensions_tiles": [
+        6,
+        6
+      ],
+      "name": "",
+      "orientation": "vertical",
+      "sides": [
+        "down",
+        "left"
+      ],
+      "color": "black"
+    },
+    {
+      "top_left_tiles": [
+        21,
+        12
+      ],
+      "dimensions_tiles": [
+        6,
+        6
+      ],
+      "name": "",
+      "orientation": "vertical",
+      "sides": [
+        "left"
+      ],
+      "color": "black"
+    }
+  ],
+  "named_wall_boxes": {},
+  "buttons": {},
+  "start_point": [
+    0,
+    0
+  ],
+  "hole": {
+    "left_top": [
+      20,
+      20
+    ],
+    "dimensions": [
+      20,
+      20
+    ],
+    "color": "black"
+  }
+}

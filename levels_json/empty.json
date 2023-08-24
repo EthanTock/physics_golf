@@ -1,1 +1,22 @@
-{"name": "empty", "colorset": "grayscale", "unnamed_wall_boxes": [], "named_wall_boxes": {}, "buttons": {}, "start_point": [0, 0], "hole": {"left_top": [20, 20], "dimensions": [20, 20], "color": "black"}}
+{
+  "name": "empty",
+  "colorset": "grayscale",
+  "unnamed_wall_boxes": [],
+  "named_wall_boxes": {},
+  "buttons": {},
+  "start_point": [
+    0,
+    0
+  ],
+  "hole": {
+    "left_top": [
+      20,
+      20
+    ],
+    "dimensions": [
+      20,
+      20
+    ],
+    "color": "black"
+  }
+}

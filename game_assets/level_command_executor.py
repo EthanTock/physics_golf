@@ -42,11 +42,13 @@ class LevelCommandExecutor:
             self.commands.append("play")
         elif command == "save":
             self.level.save_to_levels_json()
+        elif command == "quit":
+            self.commands.append("quit")
 
     def change_level_to(self, level_name):
         try:
             with open(f"levels_json/{level_name}.json", "r") as json_file:
                 self.level = Level(**json.load(json_file))
-        except FileNotFoundError:
+        except OSError:
             self.level = Level(level_name)
         self.commands.append("change")

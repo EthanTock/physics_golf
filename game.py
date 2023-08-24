@@ -29,23 +29,8 @@ clock = pg.time.Clock()
 dt = 0
 
 # Objects in-game
-outer_walls = [
-    (pg.Rect(0, 0, 1080, 20), math.pi * 3/2),
-    (pg.Rect(0, 0, 20, 720), 0),
-    (pg.Rect(0, 720-20, 1080, 20), math.pi / 2),
-    (pg.Rect(1080-20, 0, 20, 720), math.pi),
-]
 
 current_level, ball, ball_arrow, hole, level_command_executor, terminal = [None] * 6
-
-
-def get_all_walls():
-    all_walls = outer_walls.copy()
-    for w in current_level.unnamed_wall_boxes:
-        all_walls.extend(w.walls)
-    for w in current_level.named_wall_boxes.values():
-        all_walls.extend(w.walls)
-    return all_walls
 
 
 def init_level(level_name):
@@ -54,7 +39,6 @@ def init_level(level_name):
         current_level = LEVELS[level_name]
     else:
         current_level = LEVELS["empty"]
-    print(current_level.to_json())
     ball = Ball(current_level.start_point, color=current_level.ball_color)
     ball_arrow = Arrow(ball.center(), 0, 30, 48, 3, "white")
     hole = current_level.hole
@@ -90,11 +74,8 @@ while running:
 
     keys_down = pg.key.get_pressed()
 
-    if keys_down[FUNCTION_KEYS["exit"]]:
-        running = False
-
     # Draw walls
-    for wall in get_all_walls():
+    for wall in current_level.get_all_walls():
         wall_rect = wall[0]
         wall_angle = wall[1]
         pg.draw.rect(screen, current_level.wall_color, wall[0])
@@ -152,6 +133,8 @@ while running:
             rect_tool.listen(keys_down)
             if rect_tool.rect_is_ready():
                 current_level.add_wall_box(rect_tool.new_wall_box)
+            elif rect_tool.check_undo():
+                current_level.pop_wall_box()
 
         # have a saving feature to the LEVELS dict...
 
@@ -187,6 +170,8 @@ while running:
             grid_on = True
         elif command == "nogrid":
             grid_on = False
+        elif command == "quit":
+            running = False
 
     pg.display.flip()
 
