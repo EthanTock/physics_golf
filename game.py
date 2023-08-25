@@ -3,6 +3,7 @@ from game_assets.ball import Ball
 from game_assets.hole import Hole
 from game_assets.grid_showcase import GridShowcase
 from game_assets.arrow import Arrow
+from game_assets.decal import Decal
 from game_assets.terminal import Terminal
 from game_assets.level_command_executor import LevelCommandExecutor
 from game_assets.rect_tool import RectTool
@@ -29,6 +30,8 @@ clock = pg.time.Clock()
 dt = 0
 
 # Objects in-game
+
+test_decal = Decal(screen, (10, 10), (6, 3), "bad_idea/sharkboi.png", 255, (255, 0, 0), 100)
 
 current_level, ball, ball_arrow, hole, level_command_executor, terminal = [None] * 6
 
@@ -172,6 +175,8 @@ while running:
             grid_on = False
         elif command == "quit":
             running = False
+
+    test_decal.draw()
 
     pg.display.flip()
 

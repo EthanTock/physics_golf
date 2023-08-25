@@ -3,7 +3,7 @@ from math import pi
 from game_config import GRID_SIZE
 
 DEFAULT_COLOR = "black"
-THIN_WALL_THICKNESS = 8
+THIN_WALL_THICKNESS = 10
 CLIP_DEPTH = 2 * THIN_WALL_THICKNESS
 
 
