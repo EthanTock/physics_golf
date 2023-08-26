@@ -31,7 +31,8 @@ dt = 0
 
 # Objects in-game
 
-test_decal = Decal(screen, (10, 10), (6, 3), "bad_idea/sharkboi.png", 255, (255, 0, 0), 100)
+test_decal = Decal(screen, (10, 10), (18, 9), "bad_idea/medium.png", 200, (255, 0, 0), 0, (197, 219, 238))
+print(test_decal.colorpick_at((0, 0)))
 
 current_level, ball, ball_arrow, hole, level_command_executor, terminal = [None] * 6
 
@@ -61,6 +62,8 @@ rect_tool = RectTool(screen, "white", 100)
 zoomies = False
 grid_on = False
 
+# TODO Make the game an object that you can run rather than having it hog the game.py file.
+# TODO Add layers that can be rendered.
 # Game
 editor_mode = False
 running = True
