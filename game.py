@@ -7,8 +7,8 @@ from game_assets.decal import Decal
 from game_assets.terminal import Terminal
 from game_assets.level_command_executor import LevelCommandExecutor
 from game_assets.rect_tool import RectTool
-from levels import LEVELS
-from game_config import WINDOW_DIMENSIONS, WINDOW_X, GRID_SIZE, BUTTON_DARKNESS, DEBUG_FONT, DEBUG_FONT_SIZE, FUNCTION_KEYS
+from level import Level
+from game_config import WINDOW_DIMENSIONS, WINDOW_X, GRID_SIZE, BUTTON_DARKNESS, DEBUG_FONT, DEBUG_FONT_SIZE, FUNCTION_KEYS, DEFAULT_LEVEL
 import math
 
 # Constants
@@ -31,26 +31,25 @@ dt = 0
 
 # Objects in-game
 
-test_decal = Decal(screen, (10, 10), (18, 9), "bad_idea/medium.png", 200, (255, 0, 0), 0, (197, 219, 238))
-print(test_decal.colorpick_at((0, 0)))
+test_decal = Decal("leaf", (10, 10), (18, 9), "static/terminal_messing_around.png", 200, (255, 0, 0), 0, (197, 219, 238))
 
 current_level, ball, ball_arrow, hole, level_command_executor, terminal = [None] * 6
 
 
 def init_level(level_name):
     global current_level, ball, ball_arrow, hole, level_command_executor, terminal
-    if level_name in LEVELS.keys():
-        current_level = LEVELS[level_name]
-    else:
-        current_level = LEVELS["empty"]
+    if not level_command_executor:
+        level_command_executor = LevelCommandExecutor(Level("empty"))
+    level_command_executor.parse_command(f"load {level_name}")
+    current_level = level_command_executor.level
     ball = Ball(current_level.start_point, color=current_level.ball_color)
     ball_arrow = Arrow(ball.center(), 0, 30, 48, 3, "white")
     hole = current_level.hole
-    level_command_executor = LevelCommandExecutor(current_level)
     terminal = Terminal(screen, level_command_executor)
 
 
-init_level("new")
+init_level(DEFAULT_LEVEL)
+current_level.decals = {test_decal.name: test_decal}
 
 # Tools
 # grid_showcase = GridShowcase(screen, 256, ("blue", "red", "yellow", "white"), (1, 1, 2, 3), (1, 2, 5, 10))  # ("steelblue4", "springgreen3", "tan1")
@@ -142,7 +141,16 @@ while running:
             elif rect_tool.check_undo():
                 current_level.pop_wall_box()
 
+        # Decal tool
+        if current_tool == "decal":
+            pass
+            # TODO Make decal creation tool
+
         # have a saving feature to the LEVELS dict...
+
+    # Draw decals
+    for name, decal in current_level.decals.items():
+        decal.draw(screen)
 
     if keys_down[FUNCTION_KEYS["show_grid"]] or grid_on:
         grid_showcase.draw_lines()
@@ -178,8 +186,6 @@ while running:
             grid_on = False
         elif command == "quit":
             running = False
-
-    test_decal.draw()
 
     pg.display.flip()
 

@@ -2,6 +2,7 @@ from colorsets import COLORSETS
 from game_assets.wall_box import WallBox
 from game_assets.button import Button
 from game_assets.hole import Hole
+from game_assets.decal import Decal
 import pygame as pg
 import json
 import math
@@ -20,7 +21,7 @@ DEFAULT_HOLE_ARGS = {
 
 
 class Level:
-    def __init__(self, name, colorset="grayscale", unnamed_wall_boxes=(), named_wall_boxes={}, buttons={}, start_point=(0, 0), hole=DEFAULT_HOLE_ARGS):
+    def __init__(self, name, colorset="grayscale", unnamed_wall_boxes=(), named_wall_boxes={}, buttons={}, decals={}, start_point=(0, 0), hole=DEFAULT_HOLE_ARGS):
         self.name = name
         self.colorset = colorset
         self.bg_color = COLORSETS[self.colorset]["bg"]
@@ -30,6 +31,7 @@ class Level:
         self.unnamed_wall_boxes = [WallBox(**args) for args in unnamed_wall_boxes]
         self.named_wall_boxes = {name: WallBox(**kwargs) for name, kwargs in named_wall_boxes.items()}
         self.buttons = {name: Button(**kwargs) for name, kwargs in buttons.items()}
+        self.decals = {name: Decal(**kwargs) for name, kwargs in decals}
         self.start_point = start_point
         self.hole = Hole(**hole)
 
@@ -40,6 +42,7 @@ class Level:
             "unnamed_wall_boxes": [wall_box.to_kwargs() for wall_box in self.unnamed_wall_boxes],
             "named_wall_boxes": {wall_box.name: wall_box.to_kwargs() for wall_box in self.named_wall_boxes},
             "buttons": {button.name: button.to_kwargs() for button in self.buttons},
+            "decals": {decal.name: decal.to_kwargs() for decal in self.decals},
             "start_point": self.start_point,
             "hole": self.hole.to_kwargs()
         }

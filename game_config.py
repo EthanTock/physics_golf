@@ -20,3 +20,5 @@ FUNCTION_KEYS = {
     "tool_rect_orient_vertical": pg.K_UP,
     "tool_rect_finalize": pg.K_RETURN
 }
+
+DEFAULT_LEVEL = "blep"
