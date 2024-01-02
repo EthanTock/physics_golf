@@ -20,7 +20,7 @@ pg.init()
 # Display
 screen = pg.display.set_mode(WINDOW_DIMENSIONS)
 pg.display.set_caption("Physics Golf")
-app_icon = pg.image.load("./static/sharkboi.png")
+app_icon = pg.image.load("./static/terminal_messing_around.png")
 pg.display.set_icon(app_icon)
 alpha_layer = pg.Surface(WINDOW_DIMENSIONS)
 alpha_layer.set_alpha(30)
@@ -31,7 +31,7 @@ dt = 0
 
 # Objects in-game
 
-test_decal = Decal("leaf", (10, 10), (18, 9), "static/terminal_messing_around.png", 200, (255, 0, 0), 0, (197, 219, 238))
+# test_decal = Decal("leaf", (10, 10), (18, 9), "static/terminal_messing_around.png", 200, (255, 0, 0), 0, (197, 219, 238))
 
 current_level, ball, ball_arrow, hole, level_command_executor, terminal = [None] * 6
 
@@ -49,7 +49,7 @@ def init_level(level_name):
 
 
 init_level(DEFAULT_LEVEL)
-current_level.decals = {test_decal.name: test_decal}
+current_level.decals = {}
 
 # Tools
 # grid_showcase = GridShowcase(screen, 256, ("blue", "red", "yellow", "white"), (1, 1, 2, 3), (1, 2, 5, 10))  # ("steelblue4", "springgreen3", "tan1")

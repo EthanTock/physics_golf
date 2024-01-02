@@ -21,4 +21,4 @@ FUNCTION_KEYS = {
     "tool_rect_finalize": pg.K_RETURN
 }
 
-DEFAULT_LEVEL = "blep"
+DEFAULT_LEVEL = "empty"
