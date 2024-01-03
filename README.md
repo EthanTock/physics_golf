@@ -11,7 +11,7 @@ Make sure you have pygame installed by running `python3 -m pip install pygame` i
 Then, run `python3 main.py` from the `<directory>` to run the golf game!
 
 ## Tutorial
-
+Check out my tutorial for using this repository: https://youtu.be/r56zm4hm_dc?si=QazZPlVSQMqEZZ1W
 
 ## Controls
 To putt the ball, press the Space key. It will putt in the direction of the line coming out of it.  
